@@ -12,6 +12,7 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
+    "skipLibCheck": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
@@ -21,7 +22,7 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
