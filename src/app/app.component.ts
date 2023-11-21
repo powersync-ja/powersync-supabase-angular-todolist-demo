@@ -27,12 +27,8 @@ export class AppComponent implements OnInit {
         dbFilename: 'test.db'
       })
       const PowerSync = PowerSyncFactory.getInstance()
-      console.log(PowerSync)
       try {
-        PowerSync.registerListener({ 'initialized': () => console.log('initialized'), 'statusChanged': (status) => console.log(status) })
-        console.log('PowerSync init start');
         await PowerSync.init();
-        console.log('PowerSync init start');
         await PowerSync.connect(this.supabase);
         console.log('PowerSync connect');
       } catch (e) {

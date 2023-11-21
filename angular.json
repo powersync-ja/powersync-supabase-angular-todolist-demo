@@ -38,7 +38,12 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.webmanifest",
-              "src/manifest.webmanifest"
+              "src/manifest.webmanifest",
+              {
+                "glob": "SharedWASQLiteDB.js",
+                "input": "./node_modules/@journeyapps/powersync-sdk-web/dist/worker",
+                "output": "./worker/"
+              }
             ],
             "styles": [
               "src/styles.scss"
