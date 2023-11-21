@@ -30,8 +30,11 @@ export class AppComponent implements OnInit {
       console.log(PowerSync)
       try {
         PowerSync.registerListener({ 'initialized': () => console.log('initialized'), 'statusChanged': (status) => console.log(status) })
+        console.log('PowerSync init start');
         await PowerSync.init();
-        // await PowerSync.connect(this.supabase);
+        console.log('PowerSync init start');
+        await PowerSync.connect(this.supabase);
+        console.log('PowerSync connect');
       } catch (e) {
         console.log(e)
       }
