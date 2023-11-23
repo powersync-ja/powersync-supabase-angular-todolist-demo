@@ -1,6 +1,13 @@
-# Todo
+# PowerSync with Superbase Angular Todo Demo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.1.
+## Quick Start
+
+1. Run `pnpm install`
+2. Run `pnpm watch` to build application and check for code changes
+3. In a new terminal run `pnpm start` to start the server
+4. Go to <http://localhost:8080>
+
+**Note:** The Angular development server (pnpm serve) doesn't support service worker applications
 
 ## Development server
 
@@ -13,14 +20,6 @@ Run `ng generate component component-name` to generate a new component. You can 
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
 ## Further help
 
