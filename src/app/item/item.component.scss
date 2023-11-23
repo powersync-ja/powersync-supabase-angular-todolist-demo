@@ -39,23 +39,23 @@
 Adapted from https://css-tricks.com/the-checkbox-hack/#custom-designed-radio-buttons-and-checkboxes */
 
 /* Base for label styling */
-[type="checkbox"]:not(:checked),
-[type="checkbox"]:checked {
+[type='checkbox']:not(:checked),
+[type='checkbox']:checked {
   position: absolute;
   left: -9999px;
 }
 
-[type="checkbox"]:not(:checked)+label,
-[type="checkbox"]:checked+label {
+[type='checkbox']:not(:checked) + label,
+[type='checkbox']:checked + label {
   position: relative;
   padding-left: 1.95em;
   cursor: pointer;
 }
 
 /* checkbox aspect */
-[type="checkbox"]:not(:checked)+label:before,
-[type="checkbox"]:checked+label:before {
-  content: "";
+[type='checkbox']:not(:checked) + label:before,
+[type='checkbox']:checked + label:before {
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
@@ -66,9 +66,9 @@ Adapted from https://css-tricks.com/the-checkbox-hack/#custom-designed-radio-but
 }
 
 /* checked mark aspect */
-[type="checkbox"]:not(:checked)+label:after,
-[type="checkbox"]:checked+label:after {
-  content: "\2713\0020";
+[type='checkbox']:not(:checked) + label:after,
+[type='checkbox']:checked + label:after {
+  content: '\2713\0020';
   position: absolute;
   top: 0.15em;
   left: 0.22em;
@@ -76,22 +76,22 @@ Adapted from https://css-tricks.com/the-checkbox-hack/#custom-designed-radio-but
   line-height: 0.8;
   color: #0d8dee;
   transition: all 0.2s;
-  font-family: "Lucida Sans Unicode", "Arial Unicode MS", Arial;
+  font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', Arial;
 }
 
 /* checked mark aspect changes */
-[type="checkbox"]:not(:checked)+label:after {
+[type='checkbox']:not(:checked) + label:after {
   opacity: 0;
   transform: scale(0);
 }
 
-[type="checkbox"]:checked+label:after {
+[type='checkbox']:checked + label:after {
   opacity: 1;
   transform: scale(1);
 }
 
 /* accessibility */
-[type="checkbox"]:checked:focus+label:before,
-[type="checkbox"]:not(:checked):focus+label:before {
+[type='checkbox']:checked:focus + label:before,
+[type='checkbox']:not(:checked):focus + label:before {
   border: 2px dotted grey;
 }

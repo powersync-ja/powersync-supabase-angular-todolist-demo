@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { type Todo } from "../types";
-import { PowerSyncService, TODOS_TABLE } from "../powersync.service";
+import { type Todo } from '../types';
+import { PowerSyncService, TODOS_TABLE } from '../powersync.service';
 
 @Component({
   selector: 'app-item',
@@ -12,17 +12,15 @@ import { PowerSyncService, TODOS_TABLE } from "../powersync.service";
 })
 export class ItemComponent {
   @Input()
-  userId!: string
+  userId!: string;
   @Input()
-  todo!: Todo
+  todo!: Todo;
 
   @Output() remove = new EventEmitter<Todo>();
 
   editable = false;
 
-  constructor(
-    private readonly powerSync: PowerSyncService,
-  ) { }
+  constructor(private readonly powerSync: PowerSyncService) {}
 
   saveTodo(description: string) {
     if (!description) return;
@@ -34,10 +32,13 @@ export class ItemComponent {
     if (!description) return;
     this.editable = false;
     const completed_at = this.todo.completed !== completed ? 'completed_at = datetime()' : '';
-    await this.powerSync.db.execute(`
+    await this.powerSync.db.execute(
+      `
       UPDATE ${TODOS_TABLE}
       SET description = ?, completed = ?, ${completed_at}
       WHERE id = ?
-    `, [description, completed, this.todo.id]);
+    `,
+      [description, completed, this.todo.id]
+    );
   }
 }

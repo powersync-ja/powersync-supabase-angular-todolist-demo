@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { type List, type Lists } from "../types";
-import { CommonModule } from "@angular/common";
-import { AuthSession } from "@supabase/supabase-js";
-import { SupabaseService } from "../supabase.service";
-import { FormBuilder } from "@angular/forms";
-import { LISTS_TABLE, PowerSyncService } from "../powersync.service";
-import { Router } from "@angular/router";
+import { Component, Input, OnInit } from '@angular/core';
+import { type List, type Lists } from '../types';
+import { CommonModule } from '@angular/common';
+import { AuthSession } from '@supabase/supabase-js';
+import { SupabaseService } from '../supabase.service';
+import { FormBuilder } from '@angular/forms';
+import { LISTS_TABLE, PowerSyncService } from '../powersync.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lists',
@@ -17,20 +17,18 @@ import { Router } from "@angular/router";
 export class ListsComponent implements OnInit {
   lists!: Lists | null;
   @Input()
-  session!: AuthSession
-  userId: string | undefined
+  session!: AuthSession;
+  userId: string | undefined;
 
   constructor(
     private readonly supabase: SupabaseService,
-    private formBuilder: FormBuilder,
+    private readonly formBuilder: FormBuilder,
     private readonly powerSync: PowerSyncService,
     private readonly router: Router
-  ) {
-
-  }
+  ) {}
 
   async ngOnInit() {
-    this.userId = (await this.supabase.getSession())?.user.id
+    this.userId = (await this.supabase.getSession())?.user.id;
     await this.fetchLists();
   }
 
@@ -48,9 +46,12 @@ export class ListsComponent implements OnInit {
   }
 
   async addList(name: string) {
+    if (!name) return;
+
     if (!this.userId) {
       throw new Error('No user id');
     }
+
     await this.powerSync.db.execute(
       `INSERT INTO ${LISTS_TABLE} (id, created_at, name, owner_id) VALUES (uuid(), datetime(), ?, ?) RETURNING *`,
       [name, this.userId]
@@ -62,8 +63,6 @@ export class ListsComponent implements OnInit {
   }
 
   async remove(item: List) {
-    await this.powerSync.db.execute(
-      `DELETE FROM ${LISTS_TABLE} WHERE id = ?`, [item.id]
-    );
+    await this.powerSync.db.execute(`DELETE FROM ${LISTS_TABLE} WHERE id = ?`, [item.id]);
   }
 }

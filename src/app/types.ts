@@ -4,11 +4,11 @@ export interface Todo {
   completed: boolean;
 }
 
-export type Todos = Todo[]
+export type Todos = Todo[];
 
 export interface List {
-  id: string
+  id: string;
   name: string;
 }
 
-export type Lists = List[]
+export type Lists = List[];

@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { PowerSyncService } from './powersync.service';
-import { ChangeDetectorRef } from '@angular/core';
 import { ListsComponent } from './lists/lists.component';
 import { Router, RouterOutlet } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { fromEvent, map, merge } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -17,42 +16,36 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit {
   title = 'angular-user-management';
-  private subscription!: Subscription;
-  connected = false
   isLoggedIn = false;
-
+  _isOnline = window.navigator.onLine;
 
   constructor(
     private supabase: SupabaseService,
-    private readonly cdr: ChangeDetectorRef,
     private readonly powerSync: PowerSyncService,
-    private router: Router
-  ) { }
+    private readonly router: Router,
+    private readonly ngZone: NgZone
+  ) {}
 
   async ngOnInit() {
-    this.subscription = this.powerSync.connectionStatus$.subscribe(
-      (connected) => {
-        this.connected = connected;
-      }
-    );
+    // Subscribe to online/offline events
+    const online$ = fromEvent(window, 'online').pipe(map(() => true));
+    const offline$ = fromEvent(window, 'offline').pipe(map(() => false));
+    merge(online$, offline$).subscribe((isOnline) => this.ngZone.run(() => (this._isOnline = isOnline)));
+
     this.supabase.authChanges(async (_, session) => {
-      this.supabase.setSession(session)
-      this.isLoggedIn = !!session?.access_token
+      this.supabase.setSession(session);
+      this.isLoggedIn = !!session?.access_token;
       if (session?.access_token) {
         if (!this.powerSync.db.connected) {
-          await this.powerSync.setupPowerSync(this.supabase)
+          await this.powerSync.setupPowerSync(this.supabase);
         }
       }
     });
   }
 
   async signOut() {
-    await this.supabase.signOut()
-    this.isLoggedIn = false
-    this.router.navigate(['/login'])
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    await this.supabase.signOut();
+    this.isLoggedIn = false;
+    this.router.navigate(['/login']);
   }
 }

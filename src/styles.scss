@@ -32,11 +32,6 @@ input {
   background-color: #d1e0fe;
 }
 
-.btn:focus {
-  outline: none;
-  border: black solid 2px;
-}
-
 .btn-save {
   background-color: #000;
   color: #fff;
@@ -45,11 +40,6 @@ input {
 
 .btn-save:hover {
   background-color: #444242;
-}
-
-.btn-save:focus {
-  background-color: #fff;
-  color: #000;
 }
 
 .btn-primary {
@@ -64,13 +54,6 @@ input {
 
 .btn-primary:hover {
   background-color: #444242;
-}
-
-.btn-primary:focus {
-  color: #000;
-  outline: none;
-  border: #000 solid 2px;
-  background-color: #d7ecff;
 }
 
 .btn-primary:active {

@@ -8,8 +8,14 @@
     </div>
     <div class="field">
       <label for="password">Password:</label>
-      <input id="password" formControlName="password" class="inputField" type="password" required
-        placeholder="Your password" />
+      <input
+        id="password"
+        formControlName="password"
+        class="inputField"
+        type="password"
+        required
+        placeholder="Your password"
+      />
     </div>
     <div>
       <button type="submit" class="btn btn-primary" [disabled]="isLoading">
@@ -17,6 +23,6 @@
       </button>
     </div>
   </form>
-  <a routerLink="/sign-up" style="cursor: pointer;" routerLinkActive="active">Sign up</a>
+  <a routerLink="/sign-up" style="cursor: pointer" routerLinkActive="active">Sign up</a>
   <router-outlet></router-outlet>
 </div>

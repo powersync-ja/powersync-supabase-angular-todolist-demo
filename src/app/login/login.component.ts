@@ -11,14 +11,13 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-
 export class LoginComponent {
-  isLoading = false
+  isLoading = false;
 
   loginForm = this.formBuilder.group({
     email: '',
     password: ''
-  })
+  });
 
   constructor(
     private readonly supabase: SupabaseService,
@@ -27,26 +26,26 @@ export class LoginComponent {
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
 
   async onSubmit(): Promise<void> {
     try {
-      this.isLoading = true
-      const email = this.loginForm.value.email as string
-      const password = this.loginForm.value.password as string
-      const isSignedIn = await this.supabase.signIn(email, password)
+      this.isLoading = true;
+      const email = this.loginForm.value.email as string;
+      const password = this.loginForm.value.password as string;
+      const isSignedIn = await this.supabase.signIn(email, password);
       if (isSignedIn) {
-        this.router.navigate(['/lists'])
+        this.router.navigate(['/lists']);
       }
     } catch (error) {
       if (error instanceof Error) {
-        alert(error.message)
+        alert(error.message);
       }
     } finally {
-      this.loginForm.reset()
-      this.isLoading = false
+      this.loginForm.reset();
+      this.isLoading = false;
     }
   }
 }

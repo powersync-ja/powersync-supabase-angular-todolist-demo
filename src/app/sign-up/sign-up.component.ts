@@ -13,17 +13,20 @@ import { SupabaseService } from '../supabase.service';
 export class SignUpComponent {
   signupForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private supabase: SupabaseService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private supabase: SupabaseService
+  ) {
     this.signupForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
   }
 
   onSubmit() {
     if (this.signupForm.valid) {
       const { email, password } = this.signupForm.value;
-      this.supabase.signUp(email, password)
+      this.supabase.signUp(email, password);
     }
   }
 }

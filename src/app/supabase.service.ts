@@ -1,13 +1,18 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from '@angular/core';
 import {
   type AuthChangeEvent,
   type AuthSession,
   createClient,
   type Session,
-  type SupabaseClient,
-} from '@supabase/supabase-js'
-import { environment } from '../../environment'
-import { type AbstractPowerSyncDatabase, type CrudEntry, UpdateType, PowerSyncBackendConnector } from '@journeyapps/powersync-sdk-web'
+  type SupabaseClient
+} from '@supabase/supabase-js';
+import { environment } from '../../environment';
+import {
+  type AbstractPowerSyncDatabase,
+  type CrudEntry,
+  UpdateType,
+  PowerSyncBackendConnector
+} from '@journeyapps/powersync-sdk-web';
 import { Router } from '@angular/router';
 
 /// Postgres Response codes that we cannot recover from by retrying.
@@ -23,35 +28,35 @@ const FATAL_RESPONSE_CODES = [
 ];
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SupabaseService implements PowerSyncBackendConnector {
-  private supabase: SupabaseClient
-  _session: AuthSession | null = null
-  _userId: string | null = null
+  private supabase: SupabaseClient;
+  _session: AuthSession | null = null;
+  _userId: string | null = null;
 
   constructor() {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey, {
       auth: {
-        persistSession: true,
+        persistSession: true
       }
-    })
+    });
   }
 
   setUserId(userId: string) {
-    this._userId = userId
+    this._userId = userId;
   }
 
   async getSession() {
-    const { data } = await this.supabase.auth.getSession()
+    const { data } = await this.supabase.auth.getSession();
     if (data.session?.user.id) {
-      this.setUserId(data.session.user.id)
+      this.setUserId(data.session.user.id);
     }
-    return data.session
+    return data.session;
   }
 
   setSession(session: AuthSession | null) {
-    this._session = session
+    this._session = session;
   }
 
   async fetchCredentials() {
@@ -73,23 +78,22 @@ export class SupabaseService implements PowerSyncBackendConnector {
   }
 
   authChanges(callback: (event: AuthChangeEvent, session: Session | null) => void) {
-    return this.supabase.auth.onAuthStateChange(callback)
+    return this.supabase.auth.onAuthStateChange(callback);
   }
 
   async signIn(email: string, password: string) {
-    const result = await this.supabase.auth.signInWithPassword({ email, password })
+    const result = await this.supabase.auth.signInWithPassword({ email, password });
     if (result.data.session) {
-      this.setSession(result.data.session)
+      this.setSession(result.data.session);
     }
 
-    return !!result.data.session?.access_token
+    return !!result.data.session?.access_token;
   }
-
 
   async signUp(email: string, password: string): Promise<any> {
     const { data, error } = await this.supabase.auth.signUp({
       email,
-      password,
+      password
     });
 
     if (error) {
@@ -100,7 +104,7 @@ export class SupabaseService implements PowerSyncBackendConnector {
   }
 
   async signOut() {
-    await this.supabase.auth.signOut()
+    await this.supabase.auth.signOut();
   }
 
   async uploadData(database: AbstractPowerSyncDatabase): Promise<void> {

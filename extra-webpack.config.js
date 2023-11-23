@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const pkg = require('./package.json');
-const { inspect } = require("util");
-const path = require("path");
+const { inspect } = require('util');
+const path = require('path');
 
 module.exports = (config, options, targetOptions) => {
   delete config.optimization;
@@ -24,5 +24,5 @@ module.exports = (config, options, targetOptions) => {
     stats: config.stats,
     devtool: 'source-map',
     mode: 'development'
-  }
+  };
 };
