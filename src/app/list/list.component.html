@@ -1,21 +1,21 @@
 <div class="main">
-  <h1>My To Do List</h1>
-  <label for="addItemInput">What would you like to do today?</label>
+  <h1>{{list.name}}</h1>
+  <label for="addItemInput">What tasks do you want to add to the list?</label>
 
-  <input #newItem placeholder="add an item" (keyup.enter)="addItem(newItem.value); newItem.value = ''"
+  <input #newItem placeholder="add an item" (keyup.enter)="addTodo(newItem.value); newItem.value = ''"
     class="lg-text-input" id="addItemInput" />
 
-  <button class="btn-primary" (click)="addItem(newItem.value)">Add</button>
+  <button class="btn-primary" (click)="addTodo(newItem.value)">Add</button>
 
   <h2>
-    {{items.length}}
-    <span *ngIf="items.length === 1; else elseBlock">item</span>
-    <ng-template #elseBlock>items</ng-template>
+    {{todos?.length || 0}}
+    <span *ngIf="todos?.length === 1; else elseBlock">item</span>
+    <ng-template #elseBlock>todos</ng-template>
   </h2>
 
   <ul>
-    <li *ngFor="let i of items">
-      <app-item (remove)="remove(i)" [item]="i"></app-item>
+    <li *ngFor="let todo of todos">
+      <app-item (remove)="remove(todo)" [todo]="todo"></app-item>
     </li>
   </ul>
 </div>

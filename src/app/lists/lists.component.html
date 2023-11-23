@@ -1,0 +1,25 @@
+<div class="main">
+  <h1>My To Do List</h1>
+  <label for="addItemInput">What would you like to do today?</label>
+
+  <input #newItem placeholder="add a list" (keyup.enter)="addList(newItem.value); newItem.value = ''"
+    class="lg-text-input" id="addItemInput" />
+
+  <button class="btn-primary" (click)="addList(newItem.value)">Add</button>
+
+  <h2>
+    {{lists?.length || 0}}
+    <span *ngIf="lists?.length === 1; else elseBlock">list</span>
+    <ng-template #elseBlock>lists</ng-template>
+  </h2>
+
+  <ul>
+    <li *ngFor="let list of lists">
+      <p>{{list.name}}</p>
+      <div class="btn-wrapper">
+        <button (click)="goToTodoList(list)" class="btn btn-save edit">Edit</button>
+        <button (click)="remove(list)" class="btn btn-warn">Remove</button>
+      </div>
+    </li>
+  </ul>
+</div>

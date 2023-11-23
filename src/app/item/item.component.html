@@ -1,6 +1,6 @@
 <div class="item">
-  <input [id]="item.description" type="checkbox" (change)="item.done = !item.done" [checked]="item.done" />
-  <label [for]="item.description">{{item.description}}</label>
+  <input [id]="todo.description" type="checkbox" (change)="todo.done = !todo.done" [checked]="todo.done" />
+  <label [for]="todo.description">{{todo.description}}</label>
 
   <div class="btn-wrapper" *ngIf="!editable">
     <button class="btn" (click)="editable = !editable">Edit</button>
@@ -8,12 +8,12 @@
   </div>
 
   <div *ngIf="editable">
-    <input class="sm-text-input" placeholder="edit item" [value]="item.description" #editedItem
-      (keyup.enter)="saveItem(editedItem.value)" />
+    <input class="sm-text-input" placeholder="edit item" [value]="todo.description" #editedTodo
+      (keyup.enter)="editTodo(editedTodo.value)" />
 
     <div class="btn-wrapper">
       <button class="btn" (click)="editable = !editable">Cancel</button>
-      <button class="btn btn-save" (click)="saveItem(editedItem.value)">
+      <button class="btn btn-save" (click)="editTodo(editedTodo.value)">
         Save
       </button>
     </div>

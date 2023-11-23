@@ -1,47 +1,62 @@
 import { Component, OnInit } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { CommonModule } from '@angular/common';
-import { AuthComponent } from './auth/auth.component';
-import { ListComponent } from './list/list.component';
-import { AppSchema } from './powersync.service';
-import { WASQLitePowerSyncDatabaseOpenFactory } from '@journeyapps/powersync-sdk-web';
+import { LoginComponent } from './login/login.component';
+import { PowerSyncService } from './powersync.service';
+import { ChangeDetectorRef } from '@angular/core';
+import { ListsComponent } from './lists/lists.component';
+import { Router, RouterOutlet } from '@angular/router';
+import { Observable, Subscription, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, AuthComponent, ListComponent],
+  imports: [CommonModule, LoginComponent, ListsComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   title = 'angular-user-management';
+  private subscription!: Subscription;
+  connected = false
+  isLoggedIn = false;
 
-  session = this.supabase.session;
 
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(
+    private supabase: SupabaseService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly powerSync: PowerSyncService,
+    private router: Router
+  ) { }
 
-  ngOnInit() {
-    (async () => {
-      const PowerSyncFactory = new WASQLitePowerSyncDatabaseOpenFactory({
-        schema: AppSchema,
-        dbFilename: 'test.db'
-      });
-      const PowerSync = PowerSyncFactory.getInstance();
-      console.log(PowerSync);
-      try {
-        PowerSync.registerListener({
-          initialized: () => console.log('initialized'),
-          statusChanged: (status) => console.log(status)
-        });
-        console.log('PowerSync init start');
-        await PowerSync.init();
-        console.log('PowerSync init start');
-        await PowerSync.connect(this.supabase);
-        console.log('PowerSync connect');
-      } catch (e) {
-        console.log(e);
+  async ngOnInit() {
+    this.subscription = this.powerSync.connectionStatus$.subscribe(
+      (connected) => {
+        this.connected = connected;
       }
-    })();
-    this.supabase.authChanges((_, session) => (this.session = session));
+    );
+    if (await this.supabase.getSession()) {
+      this.router.navigate(['/lists'])
+    }
+    this.supabase.authChanges(async (_, session) => {
+      this.supabase.setSession(session)
+      this.isLoggedIn = !!session?.access_token
+      if (session?.access_token) {
+        if (!this.powerSync.db.connected) {
+          await this.powerSync.setupPowerSync(this.supabase)
+        }
+        this.router.navigate(['/lists'])
+      }
+    });
+  }
+
+  async signOut() {
+    await this.supabase.signOut()
+    this.isLoggedIn = false
+    this.router.navigate(['/login'])
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

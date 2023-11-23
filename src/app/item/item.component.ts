@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { CommonModule } from '@angular/common';
-import { Item } from "../types";
+import { type Todo } from "../types";
+import { PowerSyncService, TODOS_TABLE } from "../powersync.service";
 
 @Component({
   selector: 'app-item',
@@ -10,15 +11,34 @@ import { Item } from "../types";
   styleUrl: './item.component.scss'
 })
 export class ItemComponent {
+  @Input()
+  userId!: string
+  @Input()
+  todo!: Todo
+
+  @Output() remove = new EventEmitter<Todo>();
 
   editable = false;
 
-  @Input() item!: Item;
-  @Output() remove = new EventEmitter<Item>();
+  constructor(
+    private readonly powerSync: PowerSyncService,
+  ) { }
 
-  saveItem(description: string) {
+
+
+  saveTodo(description: string) {
     if (!description) return;
     this.editable = false;
-    this.item.description = description;
+    this.todo.description = description;
+  }
+
+  async editTodo(description: string) {
+    if (!description) return;
+    this.editable = false;
+    await this.powerSync.db.execute(`
+      UPDATE ${TODOS_TABLE}
+      SET description = ?
+      WHERE id = ?
+    `, [description, this.todo.id]);
   }
 }

@@ -27,6 +27,7 @@ const FATAL_RESPONSE_CODES = [
 export class SupabaseService implements PowerSyncBackendConnector {
   private supabase: SupabaseClient
   _session: AuthSession | null = null
+  _userId: string | null = null
 
   constructor() {
     this.supabase = createClient(environment.supabaseUrl, environment.supabaseKey, {
@@ -36,14 +37,19 @@ export class SupabaseService implements PowerSyncBackendConnector {
     })
   }
 
-  get session() {
-    this.supabase.auth.getSession().then(({ data }) => {
-      this._session = data.session
-    })
-    return this._session
+  setUserId(userId: string) {
+    this._userId = userId
   }
 
-  set session(session) {
+  async getSession() {
+    const { data } = await this.supabase.auth.getSession()
+    if (data.session?.user.id) {
+      this.setUserId(data.session.user.id)
+    }
+    return data.session
+  }
+
+  setSession(session: AuthSession | null) {
     this._session = session
   }
 
@@ -56,8 +62,6 @@ export class SupabaseService implements PowerSyncBackendConnector {
     if (!session || error) {
       throw new Error(`Could not fetch Supabase credentials: ${error}`);
     }
-
-    console.debug('session expires at', session.expires_at);
 
     return {
       client: this.supabase,
@@ -74,12 +78,26 @@ export class SupabaseService implements PowerSyncBackendConnector {
   async signIn(email: string, password: string) {
     const result = await this.supabase.auth.signInWithPassword({ email, password })
     if (result.data.session) {
-      this.session = result.data.session
+      this.setSession(result.data.session)
     }
   }
 
-  signOut() {
-    return this.supabase.auth.signOut()
+
+  async signUp(email: string, password: string): Promise<any> {
+    const { data, error } = await this.supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return data.user;
+  }
+
+  async signOut() {
+    await this.supabase.auth.signOut()
   }
 
   async uploadData(database: AbstractPowerSyncDatabase): Promise<void> {
@@ -111,7 +129,6 @@ export class SupabaseService implements PowerSyncBackendConnector {
         }
 
         if (result.error) {
-          console.error(result.error);
           throw new Error(`Could not update Supabase. Received error: ${result.error.message}`);
         }
       }

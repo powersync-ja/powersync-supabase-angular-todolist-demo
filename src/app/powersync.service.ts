@@ -1,4 +1,6 @@
-import { Column, ColumnType, Index, IndexedColumn, Schema, Table, WASQLitePowerSyncDatabaseOpenFactory, PowerSyncBackendConnector } from '@journeyapps/powersync-sdk-web';
+import { Injectable } from '@angular/core';
+import { AbstractPowerSyncDatabase, BaseObserver, Column, ColumnType, Index, IndexedColumn, PowerSyncBackendConnector, PowerSyncDatabase, Schema, Table, WASQLitePowerSyncDatabaseOpenFactory } from '@journeyapps/powersync-sdk-web';
+import { BehaviorSubject } from 'rxjs';
 
 export interface ListRecord {
   id: string;
@@ -13,7 +15,6 @@ export interface TodoRecord {
   completed: boolean;
   description: string;
   completed_at?: string;
-
   created_by: string;
   completed_by?: string;
   list_id: string;
@@ -45,3 +46,34 @@ export const AppSchema = new Schema([
     ]
   })
 ]);
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PowerSyncService {
+  db: AbstractPowerSyncDatabase;
+  private connectionStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  connectionStatus$ = this.connectionStatusSubject.asObservable();
+
+  constructor() {
+    const PowerSyncFactory = new WASQLitePowerSyncDatabaseOpenFactory({
+      schema: AppSchema,
+      dbFilename: 'test.db'
+    });
+    this.db = PowerSyncFactory.getInstance();
+    this.db.registerListener(({
+      statusChanged: (status) => {
+        this.connectionStatusSubject.next(status.connected)
+      }
+    }))
+  }
+
+  setupPowerSync = async (connector: PowerSyncBackendConnector) => {
+    try {
+      await this.db.init();
+      await this.db.connect(connector);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
