@@ -1,11 +1,10 @@
 <div class="main">
-  <h1>My To Do List</h1>
-  <label for="addItemInput">What would you like to do today?</label>
+  <h1>My To Do Lists</h1>
 
   <input #newItem placeholder="add a list" (keyup.enter)="addList(newItem.value); newItem.value = ''"
     class="lg-text-input" id="addItemInput" />
 
-  <button class="btn-primary" (click)="addList(newItem.value)">Add</button>
+  <button class="btn btn-primary" (click)="addList(newItem.value)">Add</button>
 
   <h2>
     {{lists?.length || 0}}

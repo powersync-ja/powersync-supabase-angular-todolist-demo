@@ -42,7 +42,7 @@ export class ListsComponent implements OnInit {
   }
 
   async *getLists(): AsyncIterable<Lists> {
-    for await (const result of this.powerSync.db.watch('SELECT * FROM lists')) {
+    for await (const result of this.powerSync.db.watch('SELECT * FROM lists ORDER BY created_at DESC')) {
       yield result.rows?._array || [];
     }
   }

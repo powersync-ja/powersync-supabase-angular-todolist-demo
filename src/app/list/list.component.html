@@ -5,7 +5,7 @@
   <input #newItem placeholder="add an item" (keyup.enter)="addTodo(newItem.value); newItem.value = ''"
     class="lg-text-input" id="addItemInput" />
 
-  <button class="btn-primary" (click)="addTodo(newItem.value)">Add</button>
+  <button class="btn btn-primary" (click)="addTodo(newItem.value)">Add</button>
 
   <h2>
     {{todos?.length || 0}}

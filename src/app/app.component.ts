@@ -6,7 +6,7 @@ import { PowerSyncService } from './powersync.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { ListsComponent } from './lists/lists.component';
 import { Router, RouterOutlet } from '@angular/router';
-import { Observable, Subscription, of } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -35,9 +35,6 @@ export class AppComponent implements OnInit {
         this.connected = connected;
       }
     );
-    if (await this.supabase.getSession()) {
-      this.router.navigate(['/lists'])
-    }
     this.supabase.authChanges(async (_, session) => {
       this.supabase.setSession(session)
       this.isLoggedIn = !!session?.access_token
@@ -45,7 +42,6 @@ export class AppComponent implements OnInit {
         if (!this.powerSync.db.connected) {
           await this.powerSync.setupPowerSync(this.supabase)
         }
-        this.router.navigate(['/lists'])
       }
     });
   }

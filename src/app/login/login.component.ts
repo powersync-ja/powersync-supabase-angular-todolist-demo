@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../supabase.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 })
 
 export class LoginComponent {
-  loading = false
+  isLoading = false
 
   loginForm = this.formBuilder.group({
     email: '',
@@ -22,7 +22,8 @@ export class LoginComponent {
 
   constructor(
     private readonly supabase: SupabaseService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -32,17 +33,20 @@ export class LoginComponent {
 
   async onSubmit(): Promise<void> {
     try {
-      this.loading = true
+      this.isLoading = true
       const email = this.loginForm.value.email as string
       const password = this.loginForm.value.password as string
-      await this.supabase.signIn(email, password)
+      const isSignedIn = await this.supabase.signIn(email, password)
+      if (isSignedIn) {
+        this.router.navigate(['/lists'])
+      }
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message)
       }
     } finally {
       this.loginForm.reset()
-      this.loading = false
+      this.isLoading = false
     }
   }
 }

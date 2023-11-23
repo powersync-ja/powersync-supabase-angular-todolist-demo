@@ -1,7 +1,7 @@
 export interface Todo {
   id: string;
   description: string;
-  done: boolean;
+  completed: boolean;
 }
 
 export type Todos = Todo[]

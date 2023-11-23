@@ -24,21 +24,20 @@ export class ItemComponent {
     private readonly powerSync: PowerSyncService,
   ) { }
 
-
-
   saveTodo(description: string) {
     if (!description) return;
     this.editable = false;
     this.todo.description = description;
   }
 
-  async editTodo(description: string) {
+  async editTodo(description: string, completed: boolean) {
     if (!description) return;
     this.editable = false;
+    const completed_at = this.todo.completed !== completed ? 'completed_at = datetime()' : '';
     await this.powerSync.db.execute(`
       UPDATE ${TODOS_TABLE}
-      SET description = ?
+      SET description = ?, completed = ?, ${completed_at}
       WHERE id = ?
-    `, [description, this.todo.id]);
+    `, [description, completed, this.todo.id]);
   }
 }

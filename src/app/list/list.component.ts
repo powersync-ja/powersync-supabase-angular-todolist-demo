@@ -43,7 +43,8 @@ export class ListComponent {
 
   async *getTodos(): AsyncIterable<Todos> {
     for await (const result of this.powerSync.db.watch(`
-      SELECT * FROM ${TODOS_TABLE} WHERE list_id=?
+      SELECT * FROM ${TODOS_TABLE} WHERE list_id = ?
+      ORDER BY created_at DESC
     `, [this.list.id])) {
       yield result.rows?._array || [];
     }

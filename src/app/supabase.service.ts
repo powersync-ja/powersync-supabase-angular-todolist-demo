@@ -8,6 +8,7 @@ import {
 } from '@supabase/supabase-js'
 import { environment } from '../../environment'
 import { type AbstractPowerSyncDatabase, type CrudEntry, UpdateType, PowerSyncBackendConnector } from '@journeyapps/powersync-sdk-web'
+import { Router } from '@angular/router';
 
 /// Postgres Response codes that we cannot recover from by retrying.
 const FATAL_RESPONSE_CODES = [
@@ -80,6 +81,8 @@ export class SupabaseService implements PowerSyncBackendConnector {
     if (result.data.session) {
       this.setSession(result.data.session)
     }
+
+    return !!result.data.session?.access_token
   }
 
 

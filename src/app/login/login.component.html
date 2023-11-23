@@ -12,8 +12,8 @@
         placeholder="Your password" />
     </div>
     <div>
-      <button type="submit" class="btn btn-primary" [disabled]="loading">
-        {{ loading ? 'Loading' : 'Sign In' }}
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        {{ isLoading ? 'Loading' : 'Sign In' }}
       </button>
     </div>
   </form>

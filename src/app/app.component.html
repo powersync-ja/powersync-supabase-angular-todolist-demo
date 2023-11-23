@@ -1,7 +1,8 @@
-<div class="container" style="padding: 50px 0 100px 0">
-  <ng-template [ngIf]="isLoggedIn">
-    <p>is connected: {{connected}}</p>
-    <button (click)="signOut()">Sign Out</button>
-  </ng-template>
+<div class="main">
+  <nav *ngIf="isLoggedIn">
+    <img [src]="connected ? '../assets/icons/wifi-on.svg' : '../assets/icons/wifi-off.svg'" alt="Connection state" />
+    <button (click)="signOut()" class="btn btn-primary">Sign Out</button>
+  </nav>
+  <div class="spacing"></div>
   <router-outlet></router-outlet>
 </div>
