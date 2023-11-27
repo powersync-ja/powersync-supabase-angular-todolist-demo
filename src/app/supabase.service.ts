@@ -4,7 +4,8 @@ import {
   type AuthSession,
   createClient,
   type Session,
-  type SupabaseClient
+  type SupabaseClient,
+  type User
 } from '@supabase/supabase-js';
 import { environment } from '../../environment';
 import {
@@ -13,7 +14,6 @@ import {
   UpdateType,
   PowerSyncBackendConnector
 } from '@journeyapps/powersync-sdk-web';
-import { Router } from '@angular/router';
 
 /// Postgres Response codes that we cannot recover from by retrying.
 const FATAL_RESPONSE_CODES = [
@@ -90,7 +90,7 @@ export class SupabaseService implements PowerSyncBackendConnector {
     return !!result.data.session?.access_token;
   }
 
-  async signUp(email: string, password: string): Promise<any> {
+  async signUp(email: string, password: string): Promise<User | null> {
     const { data, error } = await this.supabase.auth.signUp({
       email,
       password

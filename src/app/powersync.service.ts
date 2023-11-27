@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 import {
   AbstractPowerSyncDatabase,
-  BaseObserver,
   Column,
   ColumnType,
   Index,
   IndexedColumn,
   PowerSyncBackendConnector,
-  PowerSyncDatabase,
   Schema,
   Table,
   WASQLitePowerSyncDatabaseOpenFactory
 } from '@journeyapps/powersync-sdk-web';
-import { BehaviorSubject } from 'rxjs';
 
 export interface ListRecord {
   id: string;

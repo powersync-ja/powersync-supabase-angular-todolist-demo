@@ -1,6 +1,6 @@
-import { ApplicationConfig, isDevMode } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideRouter, withRouterConfig } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 

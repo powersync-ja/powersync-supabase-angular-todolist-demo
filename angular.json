@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "todo": {
+    "powersync-angular-demo": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -68,10 +68,10 @@
           "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "todo:build:production"
+              "buildTarget": "powersync-angular-demo:build:production"
             },
             "development": {
-              "buildTarget": "todo:build:development"
+              "buildTarget": "powersync-angular-demo:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +79,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "todo:build"
+            "buildTarget": "powersync-angular-demo:build"
           }
         }
       }

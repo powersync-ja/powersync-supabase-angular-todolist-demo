@@ -1,6 +1,6 @@
 {
-  "name": "todo",
-  "short_name": "todo",
+  "name": "PowerSync Angular Demo",
+  "short_name": "PowerSync Angular Demo",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
